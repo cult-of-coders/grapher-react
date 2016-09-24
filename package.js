@@ -1,6 +1,6 @@
 Package.describe({
   name: 'cultofcoders:grapher-react',
-  version: '0.0.2',
+  version: '0.0.3',
   // Brief, one-line summary of the package.
   summary: 'Provides easy to use React Components that are suitable for grapher package.',
   // URL to the Git repository containing the source code for this package.
