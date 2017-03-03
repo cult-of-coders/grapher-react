@@ -2,6 +2,10 @@ import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import SimpleSchema from 'simpl-schema';
 
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
 export default (query, options = {}) => {
     (new SimpleSchema({
         reactive: { type: Boolean, defaultValue: false },
@@ -10,8 +14,10 @@ export default (query, options = {}) => {
     })).clean(options);
 
     return (component) => {
+        const displayName = `withQuery(${getDisplayName(component)})`;
+
         if (options.reactive) {
-            return createContainer((props) => {
+            const container = createContainer((props) => {
                 if (props.params) {
                     query.setParams(props.params);
                 }
@@ -25,6 +31,10 @@ export default (query, options = {}) => {
                     ...props
                 }
             }, component);
+
+            container.displayName = displayName;
+
+            return container;
         }
 
         class MethodQueryComponent extends React.Component {
@@ -75,6 +85,8 @@ export default (query, options = {}) => {
         MethodQueryComponent.propTypes = {
             params: React.PropTypes.object
         };
+
+        MethodQueryComponent.displayName = displayName;
 
         return MethodQueryComponent;
     }
