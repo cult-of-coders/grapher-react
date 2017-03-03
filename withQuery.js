@@ -1,6 +1,6 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import { SimpleSchema } from 'simpl-schema';
+import SimpleSchema from 'simpl-schema';
 
 export default (query, options = {}) => {
     (new SimpleSchema({

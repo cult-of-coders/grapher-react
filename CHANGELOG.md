@@ -1,5 +1,6 @@
 
 ### 0.1.0
+- Use node-simple-schema instead of Meteor version.
 - Make files available at root level for cleaner direct imports. This allows you to cherry pick and allows for smaller compiled bundles.
 - Add withQuery HoF that is more composable with other HoC functions (using recompose for example).
 
