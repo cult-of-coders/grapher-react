@@ -1,3 +1,7 @@
 export {
     default as createQueryContainer
-} from './lib/createQueryContainer.js';
+} from './createQueryContainer.js';
+
+export {
+	default as withQuery
+} from './withQuery.js';
