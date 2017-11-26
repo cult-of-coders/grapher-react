@@ -1,3 +1,6 @@
+### 0.1.0
+- Moved to withQuery() functionality
+
 ### 0.0.5
 - Improved stability
 

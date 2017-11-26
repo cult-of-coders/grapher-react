@@ -2,11 +2,9 @@ import React from 'react';
 import {createContainer} from 'meteor/react-meteor-data';
 
 export default (query, component, options = {}) => {
-    (new SimpleSchema({
-        reactive: {type: Boolean, defaultValue: false},
-        single: {type: Boolean, defaultValue: false},
-        dataProp: {type: String, defaultValue: 'data'}
-    })).clean(options);
+    if (Meteor.isDevelopment) {
+        console.warn('createQueryContainer() is deprecated, please use withQuery() instead')
+    }
 
     if (options.reactive) {
         return createContainer((props) => {
