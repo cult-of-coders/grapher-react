@@ -11,12 +11,28 @@ meteor add cultofcoders:grapher-react
 ### Signature
 
 ```js
-withQuery(() => query, config)(Component)
+withQuery(() => query, options)(Component)
 ```
 
-The first function needs to return a valid Query or NamedQuery from Grapher.
+The first function needs to return a valid `Query` or `NamedQuery` from Grapher.
 
-### Configuration:
+```js
+// This is a query
+const query = createQuery({
+    users: {
+        emails: 1
+    }
+})
+
+// This is a named query
+const query = createQuery('usersWithEmails', {
+    users: {
+        emails: 1
+    }
+})
+```
+
+### Options
 
 <table>
   <tr>
@@ -96,7 +112,7 @@ Below are the properties received by the component we wrap, in the example above
   <tr>
     <td>error</td>
     <td>Meteor.Error</td>
-    <td>Represents the error triggered from your method or publication. Is falsy if it's not the case.</td>
+    <td>Represents the error triggered from your method or publication. If no error it will be a falsy value.</td>
   </tr>
   <tr>
     <td>refetch</td>
@@ -110,8 +126,8 @@ Below are the properties received by the component we wrap, in the example above
   </tr>
   <tr>
     <td>...props</td>
-    <td></td>
-    <td>The props you pass to withQuery, are passed down to the component it wraps</td>
+    <td>Object</td>
+    <td>The props you passed inside withQuery, are passed down to the component it wraps</td>
   </tr>
 </table>
 
@@ -182,7 +198,7 @@ export default withQuery((props) => {
 })(UserProfile)
 ```
 
-You will find yourself repeating the same code over and over again for when the query isLoading or it errored. For this you can do:
+You will find yourself repeating the same code over and over again for when the query is loading or it has an error. For this you can do:
 ```jsx harmony
 function ErrorComponent({error}) {
     return <div>{error.reason}</div>
@@ -222,7 +238,7 @@ setDefaults({
 })
 ```
 
-If you need custom behavior for a specific component for `error` and `loading` components you can simply do:
+You can override the defaults at the `withQuery` level, for example you want different `error` and `loading` components, you can simply do:
 
 ```jsx harmony
 export default withQuery((props) => {
