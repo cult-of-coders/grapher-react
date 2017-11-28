@@ -4,8 +4,10 @@ import {withTracker} from 'meteor/react-meteor-data';
 import withReactiveQuery from './lib/withReactiveQuery';
 import withQueryContainer from './lib/withQueryContainer';
 import withStaticQuery from './lib/withStaticQuery';
+import checkOptions from './lib/checkOptions';
 
 export default function (handler, _config = {}) {
+    checkOptions(_config);
     const config = Object.assign({}, defaults, _config);
 
     return function (component) {

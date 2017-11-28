@@ -63,6 +63,13 @@ const query = createQuery('usersWithEmails', {
     <td>true/false</td>
     <td>Defaults to `false`. If your query is for a single result, then using `true` will send data as an object instead of an array</td>
   </tr>
+  <tr>
+    <td>pollingMs</td>
+    <td>Number</td>
+    <td>
+        Defaults to undefined. Only works for non-reactive queries, it constantly polls for new data every `pollingMs` miliseconds.
+    </td>
+  </tr>
 </table>
 
 ### Simple Usage

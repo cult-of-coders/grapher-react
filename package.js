@@ -15,13 +15,12 @@ Package.onUse(function (api) {
     api.use([
         'ecmascript',
         'tracker',
+        'check',
         'reactive-var',
         'react-meteor-data@0.2.15',
         'cultofcoders:grapher@1.2.8_1',
         'tmeasday:check-npm-versions@0.2.0',
     ]);
-
-    api.imply();
 
     api.mainModule('main.client.js', 'client');
     api.mainModule('main.server.js', 'server');

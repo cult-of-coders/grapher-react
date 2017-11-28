@@ -9,6 +9,7 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import {expect} from 'chai';
 
 import PostItemContainer from './components/containers/PostItem';
+import PostItemPollingContainer from './components/containers/PostItemPolling';
 import PostItemReactiveContainer from './components/containers/PostItemReactive';
 import PostItemErrorContainer from './components/containers/PostItemError';
 import PostItemReactiveErrorContainer from './components/containers/PostItemReactiveError';
@@ -85,10 +86,36 @@ describe('withTracker()', function () {
 
         setTimeout(function () {
             wrapper.update();
-            console.log(wrapper.debug());
             expect(wrapper.find('Error').length).to.equal(1);
             expect(wrapper.find('Error').html()).to.equal('<div>not-good</div>')
             done();
         }, 100)
+    });
+
+    it('[Static] Should load the date after polling', function (done) {
+        const wrapper = mount(<PostItemPollingContainer />);
+
+        expect(wrapper.find('Post').length).to.equal(1);
+        expect(wrapper.find('Loading').length).to.equal(1);
+
+        setTimeout(function () {
+            let html = wrapper.html();
+            expect(html).to.equal('<div class="title">Post 0</div>');
+
+            // triggering a reactive change
+            wrapper.update();
+            const {data} = wrapper.find('Post').props();
+            assert.isObject(data);
+
+            Posts.update(data._id, {$set: {'title': 'Post 0 update'}});
+
+            setTimeout(function () {
+                wrapper.update();
+                let html = wrapper.html();
+                expect(html).to.equal('<div class="title">Post 0 update</div>');
+                Posts.update(data._id, {$set: {'title': 'Post 0'}});
+                done();
+            }, 200);
+        }, 100);
     });
 });
