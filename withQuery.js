@@ -5,6 +5,7 @@ import withReactiveQuery from './lib/withReactiveQuery';
 import withQueryContainer from './lib/withQueryContainer';
 import withStaticQuery from './lib/withStaticQuery';
 import checkOptions from './lib/checkOptions';
+import { SSRDataStoreContext } from './lib/SSRDataStore.js'
 
 export default function (handler, _config = {}) {
     checkOptions(_config);
@@ -14,19 +15,26 @@ export default function (handler, _config = {}) {
         const queryContainer = withQueryContainer(component);
 
         if (!config.reactive) {
-            const staticQueryContainer = withStaticQuery(queryContainer);
+            const StaticQueryContainer = withStaticQuery(queryContainer);
 
             return function (props) {
                 const query = handler(props);
 
-                return React.createElement(staticQueryContainer, {
-                    query,
-                    props,
-                    config
-                })
+                return (
+                    <SSRDataStoreContext.Consumer>
+                        {dataStore => <StaticQueryContainer query={query} props={props} config={config} dataStore={dataStore} />}
+                    </SSRDataStoreContext.Consumer>
+                )
             }
         } else {
-            return withReactiveQuery(handler, config, queryContainer);
+            const ReactiveQueryContainer = withReactiveQuery(handler, config, queryContainer);
+            return function(props) { 
+                return (
+                    <SSRDataStoreContext.Consumer>
+                        {dataStore => <ReactiveQueryContainer dataStore={dataStore} />}
+                    </SSRDataStoreContext.Consumer>
+                )
+            }
         }
     };
 }

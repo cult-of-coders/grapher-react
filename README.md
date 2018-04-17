@@ -255,3 +255,56 @@ export default withQuery((props) => {
     loadingComponent: AnotherLoadingComponent,
 })(UserProfile)
 ```
+### Server Side Rendering
+
+One common challenge with server-side rendering is hydrating client. The data used in the view needs to be available when the page loads so that React can hydrate the DOM with no differences. This technique will allow you send all of the necessary data with the initial HTML payload. The code below works with `withQuery` to track and hydrate data automatically. Works with static queries and subscriptions.
+
+On the server:
+
+```jsx harmony
+import { onPageLoad } from 'meteor/server-render'
+import { SSRDataStore } from 'meteor/cultofcoders:grapher-react'
+
+onPageLoad(async sink => {
+	const store = new SSRDataStore()
+
+	sink.renderIntoElementById(
+		'root',
+		renderToString(
+			store.collectData(<App />)
+		)
+    )
+    
+	const storeTags = store.getScriptTags()
+	sink.appendToBody(storeTags)
+})
+```
+
+On the client:
+
+```jsx harmony
+import { DataHydrator } from 'meteor/cultofcoders:grapher-react'
+
+Meteor.startup(async () => {
+	await DataHydrator.load()
+	ReactDOM.hydrate(<App />, document.getElementById('root'))
+})
+```
+
+Use `withQuery` on a component:
+
+```jsx harmony
+const SomeLoader = ({ data, isLoading, error }) => {
+	if (error) {
+		return <div>{error.reason}</div>
+	}
+
+	return <SomeList items={data} />
+}
+
+export default withQuery(
+	props => {
+		return GetSome.clone()
+	},
+)(SomeLoader)
+```

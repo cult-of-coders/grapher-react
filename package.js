@@ -20,6 +20,7 @@ Package.onUse(function (api) {
         'react-meteor-data@0.2.15',
         'cultofcoders:grapher@1.2.8_1',
         'tmeasday:check-npm-versions@0.2.0',
+        'ejson'
     ]);
 
     api.mainModule('main.client.js', 'client');

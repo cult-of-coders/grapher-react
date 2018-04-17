@@ -16,3 +16,7 @@ export {
 export {
     default as createQueryContainer
 } from './legacy/createQueryContainer.js';
+
+export {
+    default as DataHydrator
+} from './lib/DataHydrator.js';
