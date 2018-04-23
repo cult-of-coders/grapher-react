@@ -31,7 +31,7 @@ export default function (handler, _config = {}) {
             return function(props) { 
                 return (
                     <SSRDataStoreContext.Consumer>
-                        {dataStore => <ReactiveQueryContainer dataStore={dataStore} />}
+                        {dataStore => <ReactiveQueryContainer {...props} dataStore={dataStore} />}
                     </SSRDataStoreContext.Consumer>
                 )
             }
