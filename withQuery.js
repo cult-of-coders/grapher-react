@@ -1,6 +1,5 @@
 import React from 'react';
 import defaults from './defaults';
-import {withTracker} from 'meteor/react-meteor-data';
 import withReactiveQuery from './lib/withReactiveQuery';
 import withQueryContainer from './lib/withQueryContainer';
 import withStaticQuery from './lib/withStaticQuery';
@@ -12,12 +11,13 @@ export default function (handler, _config = {}) {
     const config = Object.assign({}, defaults, _config);
 
     return function (component) {
+        let C
         const queryContainer = withQueryContainer(component);
 
         if (!config.reactive) {
             const StaticQueryContainer = withStaticQuery(queryContainer);
 
-            return function (props) {
+            C = function (props) {
                 const query = handler(props);
 
                 return (
@@ -28,7 +28,7 @@ export default function (handler, _config = {}) {
             }
         } else {
             const ReactiveQueryContainer = withReactiveQuery(handler, config, queryContainer);
-            return function(props) { 
+            C = function(props) { 
                 return (
                     <SSRDataStoreContext.Consumer>
                         {dataStore => <ReactiveQueryContainer {...props} dataStore={dataStore} />}
@@ -36,5 +36,11 @@ export default function (handler, _config = {}) {
                 )
             }
         }
+
+
+        C.displayName = `withQuery(${component.displayName || component.name})`
+        C.WrappedComponent = component
+
+        return C
     };
 }
