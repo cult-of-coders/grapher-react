@@ -1,0 +1,9 @@
+{
+	"editor.tabSize": 2,
+	"editor.formatOnSave": true,
+	"eslint.enable": true,
+	"eslint.provideLintTask": true,
+	"eslint.autoFixOnSave": false,
+	"javascript.validate.enable": false,
+	"git.ignoreLimitWarning": true
+}
