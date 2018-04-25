@@ -6,8 +6,11 @@ checkNpmVersions(
     'prop-types': '15.0 - 16',
   },
   'hoist-non-react-statics',
-  'cultofcoders:grapher-react'
+  'cultofcoders:grapher-react',
+  'js-cookie'
 );
+
+import './lib/authCookie.js';
 
 export { default as setDefaults } from './setDefaults.js';
 
