@@ -1,4 +1,4 @@
 export default {
-    reactive: false,
-    single: false,
-}
+  reactive: false,
+  single: false,
+};
