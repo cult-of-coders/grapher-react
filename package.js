@@ -1,16 +1,17 @@
 Package.describe({
     name: 'cultofcoders:grapher-react',
-    version: '0.1.1',
+    version: '0.1.2',
     // Brief, one-line summary of the package.
-    summary: 'Provides HOCs for easily wrapping components with Grapher queries',
+    summary:
+        'Provides HOCs for easily wrapping components with Grapher queries',
     // URL to the Git repository containing the source code for this package.
     git: 'https://github.com/cult-of-coders/grapher-react',
     // By default, Meteor will default to using README.md for documentation.
     // To avoid submitting documentation, set this field to null.
-    documentation: 'README.md'
+    documentation: 'README.md',
 });
 
-Package.onUse(function (api) {
+Package.onUse(function(api) {
     api.versionsFrom('1.3');
     api.use([
         'ecmascript',
@@ -26,18 +27,18 @@ Package.onUse(function (api) {
     api.mainModule('main.server.js', 'server');
 });
 
-Package.onTest(function (api) {
+Package.onTest(function(api) {
     api.use([
         'cultofcoders:grapher-react',
         'cultofcoders:grapher',
         'ecmascript',
-        'mongo'
+        'mongo',
     ]);
 
     api.use([
         'coffeescript@1.12.7_3',
         'practicalmeteor:mocha@2.4.5_6',
-        'practicalmeteor:chai'
+        'practicalmeteor:chai',
     ]);
 
     api.addFiles('__tests__/main.server.js', 'server');
