@@ -9,11 +9,14 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import {expect} from 'chai';
 
 import PostItemContainer from './components/containers/PostItem';
+import PostItemWithDataPropContainer from './components/containers/PostItemWithDataProp';
+import PostItemReactiveWithDataPropContainer from './components/containers/PostItemReactiveWithDataProp';
 import PostItemPollingContainer from './components/containers/PostItemPolling';
 import PostItemReactiveContainer from './components/containers/PostItemReactive';
 import PostItemErrorContainer from './components/containers/PostItemError';
 import PostItemReactiveErrorContainer from './components/containers/PostItemReactiveError';
 import Post from './components/dumb/Post';
+import PostWithDataProp from './components/dumb/PostWithDataProp';
 import Loading from './components/dumb/Loading';
 import Error from './components/dumb/Error';
 
@@ -48,6 +51,37 @@ describe('withTracker()', function () {
         }, 100)
     });
 
+    it('[Static] Should work with dataProp', function (done) {
+        const wrapper = mount(<PostItemWithDataPropContainer />);
+        let loadingComponent = wrapper.html();
+
+        expect(wrapper.find('PostWithDataProp').length).to.equal(1);
+        expect(wrapper.find('Loading').length).to.equal(1);
+
+        setTimeout(function () {
+            let html = wrapper.html();
+            expect(html).to.equal('<div class="title">Post 0</div>');
+
+            done();
+        }, 100)
+    });
+
+    it('[Reactive] Should work with dataProp', function (done) {
+        const wrapper = mount(<PostItemReactiveWithDataPropContainer />);
+        let loadingComponent = wrapper.html();
+
+        // expect(wrapper.find('PostWithDataProp').length).to.equal(1);
+        // expect(wrapper.find('Loading').length).to.equal(1);
+
+        setTimeout(function () {
+            wrapper.update();
+
+            let html = wrapper.html();
+            expect(html).to.equal('<div class="title">Post 0</div>');
+
+            done();
+        }, 100)
+    });
 
     it('[Reactive] Should load the date after mounting', function (done) {
         const wrapper = mount(<PostItemReactiveContainer />);
