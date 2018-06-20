@@ -35,11 +35,7 @@ Package.onTest(function(api) {
         'mongo',
     ]);
 
-    api.use([
-        'coffeescript@1.12.7_3',
-        'practicalmeteor:mocha@2.4.5_6',
-        'practicalmeteor:chai',
-    ]);
+    api.use(['cultofcoders:mocha', 'practicalmeteor:chai']);
 
     api.addFiles('__tests__/main.server.js', 'server');
     api.addFiles('__tests__/main.client.js', 'client');

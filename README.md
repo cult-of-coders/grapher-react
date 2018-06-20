@@ -3,15 +3,15 @@
 Using the [cultofcoders:grapher](https://github.com/cult-of-coders/grapher) query component in React.
 
 ### Installation
+
 ```bash
 meteor add cultofcoders:grapher-react
 ```
 
-
 ### Signature
 
 ```js
-withQuery(() => query, options)(Component)
+withQuery(() => query, options)(Component);
 ```
 
 The first function needs to return a valid `Query` or `NamedQuery` from Grapher.
@@ -20,16 +20,16 @@ The first function needs to return a valid `Query` or `NamedQuery` from Grapher.
 // This is a query
 const query = createQuery({
     users: {
-        emails: 1
-    }
-})
+        emails: 1,
+    },
+});
 
 // This is a named query
 const query = createQuery('usersWithEmails', {
     users: {
-        emails: 1
-    }
-})
+        emails: 1,
+    },
+});
 ```
 
 ### Options
@@ -46,6 +46,13 @@ const query = createQuery('usersWithEmails', {
     <td>
         Defaults to `false`.
         Makes your query reactive (subscribes to changes) or non-reactive, falls back to method calls.
+    </td>
+  </tr>
+  <tr>
+    <td>dataProp</td>
+    <td>string</td>
+    <td>
+        Defaults to `data`. How to properly inject data in your component, like `users` or `posts`
     </td>
   </tr>
   <tr>
@@ -76,27 +83,23 @@ const query = createQuery('usersWithEmails', {
 
 ```jsx harmony
 import React from 'react';
-import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
 
-const PostList = ({data, isLoading, error}) => {
+const PostList = ({ data, isLoading, error }) => {
     if (isLoading) {
-        return <div>Loading</div>
+        return <div>Loading</div>;
     }
-    
-    if (error) {
-        return <div>{error.reason}</div>
-    }
-    
-    return (
-        <div>
-            {data.map(post => <li key={post._id}>{post.title}</li>)}
-        </div>
-    )
-}
 
-export default withQuery((props) => {
+    if (error) {
+        return <div>{error.reason}</div>;
+    }
+
+    return <div>{data.map(post => <li key={post._id}>{post.title}</li>)}</div>;
+};
+
+export default withQuery(props => {
     return getPostLists.clone();
-})(PostList)
+})(PostList);
 ```
 
 ### Props Received
@@ -144,27 +147,32 @@ The first example uses the query non-reactively (because that is the default). B
 
 ```jsx harmony
 // ...
-export default withQuery((props) => {
-    return getPostLists.clone();
-}, {reactive: true})(PostList)
+export default withQuery(
+    props => {
+        return getPostLists.clone();
+    },
+    { reactive: true }
+)(PostList);
 ```
 
 As mentioned above, the props received are passed down to the component we wrap, meaning:
 
 ```jsx harmony
-const PostList = ({data, something}) => {
-    return <div>Something is true!</div>
+const PostList = ({ data, something }) => {
+    return <div>Something is true!</div>;
 };
 
-const Container = withQuery((props) => {
-    return getPostLists.clone();
-}, {reactive: true})(PostList);
+const Container = withQuery(
+    props => {
+        return getPostLists.clone();
+    },
+    { reactive: true }
+)(PostList);
 
-export default function () {
+export default function() {
     return <Container something={true} />;
 }
 ```
-
 
 The query object is also passed down as a prop, so, if you ever need it you can access it from there.
 
@@ -173,85 +181,94 @@ and updates the components properly:
 
 ```jsx harmony
 import React from 'react';
-import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
 
-const PostList = ({data, isLoading, error, refetch}) => {
+const PostList = ({ data, isLoading, error, refetch }) => {
     return (
         <div>
             <a onClick={refetch}>Reload the data</a>
             {/* Rest of the component */}
         </div>
-    )
-}
+    );
+};
 
-export default withQuery((props) => {
-    return getPostLists.clone();
-}, {reactive: false})(PostList)
+export default withQuery(
+    props => {
+        return getPostLists.clone();
+    },
+    { reactive: false }
+)(PostList);
 ```
 
 If you container wraps a single object, and not a list of objects, you can configure your query like this:
 
 ```jsx harmony
-const UserProfile = ({data, isLoading, error}) => {
-    return (
-        <div>{data.email}</div>
-    )
+const UserProfile = ({ data, isLoading, error }) => {
+    return <div>{data.email}</div>;
 };
 
-export default withQuery((props) => {
-    return getUserProfile.clone({userId: props.userId});
-}, {
-    single: true
-})(UserProfile)
+export default withQuery(
+    props => {
+        return getUserProfile.clone({ userId: props.userId });
+    },
+    {
+        single: true,
+    }
+)(UserProfile);
 ```
 
 You will find yourself repeating the same code over and over again for when the query is loading or it has an error. For this you can do:
+
 ```jsx harmony
-function ErrorComponent({error}) {
-    return <div>{error.reason}</div>
-};
-
-function LoadingComponent() {
-    return <div>Please wait...</div>
-};
-
-const UserProfile = ({data}) => {
-    return (
-        <div>{data.email}</div>
-    )
+function ErrorComponent({ error }) {
+    return <div>{error.reason}</div>;
 }
 
-export default withQuery((props) => {
-    return getUserProfile.clone({userId: props.userId});
-}, {
-    single: true,
-    errorComponent: ErrorComponent,
-    loadingComponent: LoadingComponent
-})(UserProfile)
+function LoadingComponent() {
+    return <div>Please wait...</div>;
+}
+
+const UserProfile = ({ data }) => {
+    return <div>{data.email}</div>;
+};
+
+export default withQuery(
+    props => {
+        return getUserProfile.clone({ userId: props.userId });
+    },
+    {
+        single: true,
+        errorComponent: ErrorComponent,
+        loadingComponent: LoadingComponent,
+    }
+)(UserProfile);
 ```
 
-The `UserProfile` component will not render if it's loading or it errored. 
+The `UserProfile` component will not render if it's loading or it errored.
 
 To make things even more simple, you can globally define these rules, and all the components by default will have those options.
 
 ```jsx harmony
-import {setDefaults} from 'meteor/cultofcoders:grapher-react';
+import { setDefaults } from 'meteor/cultofcoders:grapher-react';
 
 setDefaults({
     reactive: false, // you can default it to true
     single: false, // doesn't make sense to default this to true
     errorComponent: ErrorComponent,
-    loadingComponent: LoadingComponent
-})
+    loadingComponent: LoadingComponent,
+});
 ```
 
 You can override the defaults at the `withQuery` level, for example you want different `error` and `loading` components, you can simply do:
 
 ```jsx harmony
-export default withQuery((props) => {
-    return getUserProfile.clone({userId: props.userId});
-}, {
-    errorComponent: null,
-    loadingComponent: AnotherLoadingComponent,
-})(UserProfile)
+export default withQuery(
+    props => {
+        return getUserProfile.clone({ userId: props.userId });
+    },
+    {
+        errorComponent: null,
+        loadingComponent: AnotherLoadingComponent,
+    }
+)(UserProfile);
 ```
