@@ -19,16 +19,16 @@ The first function needs to return a valid `Query` or `NamedQuery` from Grapher.
 ```js
 // This is a query
 const query = createQuery({
-    users: {
-        emails: 1,
-    },
+  users: {
+    emails: 1
+  }
 });
 
 // This is a named query
 const query = createQuery('usersWithEmails', {
-    users: {
-        emails: 1,
-    },
+  users: {
+    emails: 1
+  }
 });
 ```
 
@@ -38,41 +38,47 @@ const query = createQuery('usersWithEmails', {
   <tr>
     <th>Property</th>
     <th>Valid values</th>
+    <th>Default value</th>
     <th>Description</th>
   </tr>
   <tr>
     <td>reactive</td>
     <td>true/false</td>
+    <td>`false`</td>
     <td>
-        Defaults to `false`.
         Makes your query reactive (subscribes to changes) or non-reactive, falls back to method calls.
     </td>
   </tr>
   <tr>
     <td>dataProp</td>
     <td>string</td>
+    <td>`'data'`</td>
     <td>
-        Defaults to `data`. How to properly inject data in your component, like `users` or `posts`
+        How to properly inject data in your component, like `users` or `posts`
     </td>
   </tr>
   <tr>
     <td>errorComponent</td>
     <td>React.Component (optional)</td>
-    <td>Defaults to `null`. Receives `error` object as a prop. Is rendered when subscription or method call triggered an exception</td>
+    <td>`null`</td>  
+    <td>Receives `error` object as a prop. Is rendered when subscription or method call triggered an exception</td>
   </tr>
   <tr>
     <td>loadingComponent</td>
     <td>React.Component (optional)</td>
-    <td>Defaults to `null`. Renders when the data is waiting to be loaded from the server</td>
+    <td>`null`</td>
+    <td>Renders when the data is waiting to be loaded from the server</td>
   </tr>
   <tr>
     <td>single</td>
     <td>true/false</td>
-    <td>Defaults to `false`. If your query is for a single result, then using `true` will send data as an object instead of an array</td>
+    <td>`false`</td>
+    <td>If your query is for a single result, then using `true` will send data as an object instead of an array</td>
   </tr>
   <tr>
     <td>pollingMs</td>
     <td>Number</td>
+    <td>`undefined`</td>
     <td>
         Only works for non-reactive queries, it constantly polls for new data every `pollingMs` miliseconds.
     </td>
@@ -94,19 +100,25 @@ import React from 'react';
 import { withQuery } from 'meteor/cultofcoders:grapher-react';
 
 const PostList = ({ data, isLoading, error }) => {
-    if (isLoading) {
-        return <div>Loading</div>;
-    }
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
 
-    if (error) {
-        return <div>{error.reason}</div>;
-    }
+  if (error) {
+    return <div>{error.reason}</div>;
+  }
 
-    return <div>{data.map(post => <li key={post._id}>{post.title}</li>)}</div>;
+  return (
+    <div>
+      {data.map(post => (
+        <li key={post._id}>{post.title}</li>
+      ))}
+    </div>
+  );
 };
 
 export default withQuery(props => {
-    return getPostLists.clone();
+  return getPostLists.clone();
 })(PostList);
 ```
 
@@ -156,10 +168,10 @@ The first example uses the query non-reactively (because that is the default). B
 ```jsx harmony
 // ...
 export default withQuery(
-    props => {
-        return getPostLists.clone();
-    },
-    { reactive: true }
+  props => {
+    return getPostLists.clone();
+  },
+  { reactive: true }
 )(PostList);
 ```
 
@@ -167,18 +179,18 @@ As mentioned above, the props received are passed down to the component we wrap,
 
 ```jsx harmony
 const PostList = ({ data, something }) => {
-    return <div>Something is true!</div>;
+  return <div>Something is true!</div>;
 };
 
 const Container = withQuery(
-    props => {
-        return getPostLists.clone();
-    },
-    { reactive: true }
+  props => {
+    return getPostLists.clone();
+  },
+  { reactive: true }
 )(PostList);
 
 export default function() {
-    return <Container something={true} />;
+  return <Container something={true} />;
 }
 ```
 
@@ -192,19 +204,19 @@ import React from 'react';
 import { withQuery } from 'meteor/cultofcoders:grapher-react';
 
 const PostList = ({ data, isLoading, error, refetch }) => {
-    return (
-        <div>
-            <a onClick={refetch}>Reload the data</a>
-            {/* Rest of the component */}
-        </div>
-    );
+  return (
+    <div>
+      <a onClick={refetch}>Reload the data</a>
+      {/* Rest of the component */}
+    </div>
+  );
 };
 
 export default withQuery(
-    props => {
-        return getPostLists.clone();
-    },
-    { reactive: false }
+  props => {
+    return getPostLists.clone();
+  },
+  { reactive: false }
 )(PostList);
 ```
 
@@ -212,16 +224,16 @@ If you container wraps a single object, and not a list of objects, you can confi
 
 ```jsx harmony
 const UserProfile = ({ data, isLoading, error }) => {
-    return <div>{data.email}</div>;
+  return <div>{data.email}</div>;
 };
 
 export default withQuery(
-    props => {
-        return getUserProfile.clone({ userId: props.userId });
-    },
-    {
-        single: true,
-    }
+  props => {
+    return getUserProfile.clone({ userId: props.userId });
+  },
+  {
+    single: true
+  }
 )(UserProfile);
 ```
 
@@ -229,26 +241,26 @@ You will find yourself repeating the same code over and over again for when the 
 
 ```jsx harmony
 function ErrorComponent({ error }) {
-    return <div>{error.reason}</div>;
+  return <div>{error.reason}</div>;
 }
 
 function LoadingComponent() {
-    return <div>Please wait...</div>;
+  return <div>Please wait...</div>;
 }
 
 const UserProfile = ({ data }) => {
-    return <div>{data.email}</div>;
+  return <div>{data.email}</div>;
 };
 
 export default withQuery(
-    props => {
-        return getUserProfile.clone({ userId: props.userId });
-    },
-    {
-        single: true,
-        errorComponent: ErrorComponent,
-        loadingComponent: LoadingComponent,
-    }
+  props => {
+    return getUserProfile.clone({ userId: props.userId });
+  },
+  {
+    single: true,
+    errorComponent: ErrorComponent,
+    loadingComponent: LoadingComponent
+  }
 )(UserProfile);
 ```
 
@@ -260,10 +272,10 @@ To make things even more simple, you can globally define these rules, and all th
 import { setDefaults } from 'meteor/cultofcoders:grapher-react';
 
 setDefaults({
-    reactive: false, // you can default it to true
-    single: false, // doesn't make sense to default this to true
-    errorComponent: ErrorComponent,
-    loadingComponent: LoadingComponent,
+  reactive: false, // you can default it to true
+  single: false, // doesn't make sense to default this to true
+  errorComponent: ErrorComponent,
+  loadingComponent: LoadingComponent
 });
 ```
 
@@ -271,12 +283,12 @@ You can override the defaults at the `withQuery` level, for example you want dif
 
 ```jsx harmony
 export default withQuery(
-    props => {
-        return getUserProfile.clone({ userId: props.userId });
-    },
-    {
-        errorComponent: null,
-        loadingComponent: AnotherLoadingComponent,
-    }
+  props => {
+    return getUserProfile.clone({ userId: props.userId });
+  },
+  {
+    errorComponent: null,
+    loadingComponent: AnotherLoadingComponent
+  }
 )(UserProfile);
 ```
