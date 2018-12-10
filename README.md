@@ -74,7 +74,15 @@ const query = createQuery('usersWithEmails', {
     <td>pollingMs</td>
     <td>Number</td>
     <td>
-        Defaults to undefined. Only works for non-reactive queries, it constantly polls for new data every `pollingMs` miliseconds.
+        Only works for non-reactive queries, it constantly polls for new data every `pollingMs` miliseconds.
+    </td>
+  </tr>
+  <tr>
+    <td>loadOnRefetch</td>
+    <td>true/false</td>
+    <td>`true`</td>
+    <td>
+        For static (`reactive = false`) queries only, sets `isLoading` to true every time you call refetch until the data is loaded. Set this to false to only get `isLoading` on the initial fetch.
     </td>
   </tr>
 </table>
