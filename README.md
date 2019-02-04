@@ -94,7 +94,7 @@ const query = createQuery('usersWithEmails', {
       <tr>
     <td>shouldRefetch</td>
     <td>(currentProps, nextProps) => Boolean</td>
-    <td>`true`</td>
+    <td>`undefined`</td>
     <td>
         For static queries only, provides a hook into `componentWillReceiveProps` to determine whether the query should be refetched or not. The function will be called with nextProps and currentProps as arguments.
     </td>
