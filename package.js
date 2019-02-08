@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:grapher-react',
-    version: '0.1.4',
+    version: '0.1.5',
     // Brief, one-line summary of the package.
     summary:
         'Provides HOCs for easily wrapping components with Grapher queries',
