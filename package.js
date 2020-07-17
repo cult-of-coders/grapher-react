@@ -35,7 +35,7 @@ Package.onTest(function (api) {
         'mongo',
     ]);
 
-    api.use(['cultofcoders:mocha', 'practicalmeteor:chai']);
+    api.use(['cultofcoders:mocha']);
 
     api.addFiles('__tests__/main.server.js', 'server');
     api.addFiles('__tests__/main.client.js', 'client');
